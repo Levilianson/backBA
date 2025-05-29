@@ -18,6 +18,7 @@ public class Producto {
         this.stock = stock;
         contID++;
     }
+    //public Producto(){}
     // METODOS DE LA CLASE
     public void imprimir(){
         System.out.printf("""

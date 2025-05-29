@@ -36,7 +36,7 @@ public class Main {
                 switch (opcion){
                     case 1 -> agregarProducto(productos);
                     case 2 -> mostrarProductos(productos);
-                    case 3 -> buscarProducto(productos);
+                    case 3 -> actualizarProducto(productos);
                     case 4 -> eliminarProducto(productos);
                     case 5 -> System.out.println(" faltaCrear un pedido");
                     case 6 -> System.out.println("faltaListar pedidos...");
@@ -79,35 +79,52 @@ public class Main {
             }
         }
     }
-
-    private static void buscarProducto(ArrayList<Producto>productos){
-        System.out.println("Buscando producto: ");
+    private static boolean buscarProducto(ArrayList<Producto>productos){
         Scanner entrada = new Scanner(System.in);
         String buscar = entrada.nextLine();
-        ArrayList<Producto>encontrado = new ArrayList<>();
-
+        boolean aux= false;
         for(Producto producto: productos){
             if(producto.buscarProducto(buscar)){
-                encontrado.add(producto);
-            }
-        }
-
-        if (encontrado.isEmpty()){
-            System.out.println("NO ESTA EL PRODUCTO");
-        }
-        else {
-            for(Producto producto : encontrado){
                 producto.imprimir();
+                aux= true;
             }
+        }
+        return aux;
+    }
+
+    private static void actualizarProducto(ArrayList<Producto>productos){
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Buscando producto: ");
+        boolean esta = buscarProducto(productos);
+
+        if(esta){
+            System.out.println("Producto encontrado");
+            System.out.println(" Actualiza el stock SI=1 / NO=2");
+            int actualizar = entrada.nextInt();
+            if(actualizar==1){
+                System.out.println("Ingrese solo el id del producto a actualizar: ");
+                int id = entrada.nextInt();
+                System.out.println("ingrese nuevo Stock");
+                int numero= entrada.nextInt();
+                productos.get(id).cambiarStock(numero);
+                System.out.println("Stock actualizado");
+                productos.get(id).imprimir();
+            }
+            else if(actualizar==2)System.out.println("busqueda finalizada");
+
+        } else if (!esta) {
+            System.out.println("Producto no encontrado");
         }
     }
 
     private static void eliminarProducto(ArrayList<Producto>productos){
+
         Scanner entrada = new Scanner(System.in);
         System.out.println("ID para eliminar: ");
         int idABorrar = entrada.nextInt();
         boolean borrado = false;
         boolean esta = false;
+       //BUSQUEDA POR ID
         for(Producto producto : productos){
             if(producto.dameId() == idABorrar){
                 esta = true;
